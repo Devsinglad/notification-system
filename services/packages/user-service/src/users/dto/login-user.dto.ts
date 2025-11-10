@@ -9,6 +9,7 @@ export class LoginUserDto {
     @ApiProperty({ example: 'SecurePass123!', required: true })
     @IsString()
     @MinLength(8)
+    @IsString()
     password: string;
 
     @ApiProperty({ example: 'fcm_token_here', required: false })
