@@ -1,11 +1,13 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
+ 
   constructor(private prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -89,6 +91,35 @@ export class UsersService {
     });
 
     const { password_hash: _, ...result } = updatedUser;
+    return result;
+  }
+
+  async login(loginUserDto: LoginUserDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: loginUserDto.email },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const isPasswordValid = await bcrypt.compare(loginUserDto.password, user.password_hash);
+
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const { password_hash, ...result } = user;
+    
+    // Update push token if provided
+    if (loginUserDto.push_token) {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { push_token: loginUserDto.push_token },
+      });
+      result.push_token = loginUserDto.push_token;
+    }
+
     return result;
   }
 }
