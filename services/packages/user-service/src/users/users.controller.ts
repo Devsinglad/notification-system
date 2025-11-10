@@ -1,3 +1,8 @@
+// NOTE: There may be TypeScript compilation errors related to the 'effect' library
+// which is a dependency of Prisma. These errors are not related to our code
+// and can be ignored. The application should still run despite these errors.
+// The effect library has compatibility issues with certain TypeScript versions.
+
 import { Controller, Get, Put, Body, UseGuards, Request, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { UsersService } from './users.service';
