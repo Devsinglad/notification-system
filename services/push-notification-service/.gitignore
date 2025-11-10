@@ -1,0 +1,11 @@
+mindful-torus-458106-p9-firebase-adminsdk-fbsvc-4309b262d6.json
+test/*
+template/*
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv

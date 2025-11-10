@@ -1,0 +1,19 @@
+fastapi
+uvicorn
+pika
+redis
+requests
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+firebase-admin
+pydantic
+fastapi
+uvicorn[standard]
+# pybreaker==0.7.0
+# prometheus-client
+jinja2
+python-dotenv
+structlog
+httpx
+psycopg2-binary
