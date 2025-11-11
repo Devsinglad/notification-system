@@ -4,10 +4,10 @@ import { getSafeUptime } from './utils/uptime.util';
 @Injectable()
 export class AppService {
   getHello(): string {
-    return 'Hello World!';
+    return 'Hello User! Welcome to the Notification System User Service.';
   }
 
-   checkHealth() {
+  checkHealth() {
     return {
       success: true,
       message: 'User Service is healthy',
