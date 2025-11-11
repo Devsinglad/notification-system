@@ -4,9 +4,11 @@ import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { ServicesModule } from '../services/services.module';
 
 @Module({
   imports: [
+    ServicesModule, // Import ServicesModule to access UserServiceClient
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => {
         const secret = configService.get<string>('jwt.secret');
@@ -25,6 +27,6 @@ import { JwtAuthGuard } from './jwt-auth.guard';
     }),
   ],
   providers: [AuthService, JwtStrategy, JwtAuthGuard],
-  exports: [JwtModule, JwtAuthGuard],
+  exports: [JwtModule, JwtAuthGuard, AuthService], // Export AuthService so it can be used by other modules
 })
 export class AuthModule {}

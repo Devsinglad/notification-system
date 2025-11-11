@@ -41,7 +41,7 @@ export class UserServiceClient {
 
       // If not in cache, fetch from user service
       const response = await firstValueFrom(
-        this.httpService.get(`${this.userServiceUrl}/api/v1/users/${userId}`),
+        this.httpService.get(`${this.userServiceUrl}/users/${userId}`),
       );
 
       const user = response.data;
@@ -62,7 +62,7 @@ export class UserServiceClient {
   async getUserByEmail(email: string): Promise<User> {
     try {
       const response = await firstValueFrom(
-        this.httpService.get(`${this.userServiceUrl}/api/v1/users/email/${email}`),
+        this.httpService.get(`${this.userServiceUrl}/users/email/${email}`),
       );
 
       return response.data;
@@ -86,7 +86,7 @@ export class UserServiceClient {
 
       // Fetch from user service
       const response = await firstValueFrom(
-        this.httpService.get(`${this.userServiceUrl}/api/v1/users/${userId}/preferences`),
+        this.httpService.get(`${this.userServiceUrl}/users/${userId}/preferences`),
       );
 
       const preferences = response.data;
@@ -107,7 +107,7 @@ export class UserServiceClient {
   async validateUser(email: string, password: string): Promise<User | null> {
     try {
       const response = await firstValueFrom(
-        this.httpService.post(`${this.userServiceUrl}/api/v1/auth/validate`, {
+        this.httpService.post(`${this.userServiceUrl}/auth/validate`, {
           email,
           password,
         }),
