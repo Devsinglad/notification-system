@@ -1,17 +1,9 @@
-from contextlib import asynccontextmanager
+"""FastAPI app main entry point"""
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .db import engine
-from sqlmodel import SQLModel
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    print("Starting up: creating database tables...")
-    SQLModel.metadata.create_all(engine)
-
-    yield
-    print("Shutting down...")
+from .core.lifespan import lifespan
+from app.api.v1.templates import router as templates_router
 
 
 app = FastAPI(
@@ -28,6 +20,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(templates_router, prefix="/api/v1/templates", tags=["Templates"])
 
 
 @app.get("/health")
