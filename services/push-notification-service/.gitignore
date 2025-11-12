@@ -1,15 +1,4 @@
-mindful-torus-458106-p9-firebase-adminsdk-fbsvc-4309b262d6.json
-test/*
-template/
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.venv
-aws_tolulole.pem
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
@@ -40,14 +29,8 @@ ENV/
 # OS
 .DS_Store
 Thumbs.db
-
+log
 # Logs
 logs/*.log
-
-.bash_logout
-.bashrc
-.lesshst
-.profile
-.ssh/
-.sudo_as_admin_successful
-.viminfo
+firebase-credentials.json
+mindful-torus-458106-p9-firebase-adminsdk-*.json

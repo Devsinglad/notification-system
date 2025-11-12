@@ -20,7 +20,6 @@ from app.models import Base, Notification, DeviceToken
 
 # Configure logging
 logging.basicConfig(
-    filename="push_notification.log",
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
