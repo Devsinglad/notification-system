@@ -20,7 +20,6 @@ from app.models import Base, Notification, DeviceToken
 
 # Configure logging
 logging.basicConfig(
-    filename="push_notification.log",
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
@@ -105,6 +104,8 @@ class CircuitBreaker:
                 self.state = "OPEN"
                 logger.error(f"Circuit breaker opened after {self.failures} failures")
             raise e
+
+
 
 # ============= Push Service Manager =============
 class PushServiceManager:
@@ -566,6 +567,8 @@ class NotificationConsumer:
         await retry_queue.consume(self.process_message)
         
         logger.info("Started consuming messages from push and retry queues")
+
+# ============= Database Manager =============
 
 # ============= FastAPI Application =============
 # Global instances

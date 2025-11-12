@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FCM Token Fetcher</title>
+</head>
+<body>
+  <h2>Firebase Cloud Messaging Token Fetcher</h2>
+  <button id="getTokenBtn">Get FCM Token</button>
+
+  <pre id="tokenOutput" style="white-space: pre-wrap; margin-top: 20px; background: #f4f4f4; padding: 10px; border-radius: 6px;"></pre>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-messaging.js";
+
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAhjO0QwwuwnySLBYzGPgPfgPCVpIg-lGg",
+      authDomain: "mindful-torus-458106-p9.firebaseapp.com",
+      projectId: "mindful-torus-458106-p9",
+      storageBucket: "mindful-torus-458106-p9.firebasestorage.app",
+      messagingSenderId: "1073235646116",
+      appId: "1:1073235646116:web:7df2d8ca4d1a3c23fd7831"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const messaging = getMessaging(app);
+    // const VAPID_KEY = "BHL99TXdSPLmvxRkimYNKoLsjBIMe3TYNb3RPnGEe1M-7e8msvm7n2IVtU48mvDdJ0CO9MpcHBX_PgZYgYsHvL8";
+
+    // Register service worker
+    let swRegistration;
+    if ('serviceWorker' in navigator) {
+      try {
+        swRegistration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+        console.log("Service Worker registered:", swRegistration);
+      } catch (err) {
+        console.error("Service Worker registration failed:", err);
+      }
+    }
+
+    // Button to get FCM token
+    document.getElementById("getTokenBtn").addEventListener("click", async () => {
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") {
+          alert("Notification permission denied 😢");
+          return;
+        }
+
+        const token = await getToken(messaging, {
+          vapidKey: "BHL99TXdSPLmvxRkimYNKoLsjBIMe3TYNb3RPnGEe1M-7e8msvm7n2IVtU48mvDdJ0CO9MpcHBX_PgZYgYsHvL8",
+          serviceWorkerRegistration: swRegistration
+        });
+
+        if (token) {
+          console.log("✅ FCM Token:", token);
+          document.getElementById("tokenOutput").textContent = token;
+        } else {
+          console.warn("No token available.");
+        }
+      } catch (err) {
+        console.error("Error fetching token:", err);
+        alert("Error fetching token: " + err.message);
+      }
+    });
+
+    // Foreground messages
+    onMessage(messaging, (payload) => {
+      console.log("📩 Foreground message:", payload);
+      alert(`New message:\n${payload.notification.title}\n${payload.notification.body}`);
+    });
+  </script>
+</body>
+</html>
