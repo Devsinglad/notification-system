@@ -2,3 +2,4 @@ template-venv
 *.py[cod]
 .env
 DS_store
+dump.rdb
