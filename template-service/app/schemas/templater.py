@@ -117,3 +117,7 @@ class TemplateRenderSchema(BaseModel):
     content: str
     type: TemplateType
     user: Optional[dict]
+    
+class PreviewRequest(BaseModel):
+    user_service_url: Optional[str] = None
+    email_service_url: Optional[str] = None
