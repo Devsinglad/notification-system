@@ -22,8 +22,8 @@ services:
       REDIS_URL: ${REDIS_URL}
       
       # Service URLs
-      USER_SERVICE_URL: http://user-service:3001
-      EMAIL_SERVICE_URL: http://email-service:3002
+      USER_SERVICE_URL: http://localhost:3001
+      EMAIL_SERVICE_URL: http://localhost:3002
       PUSH_NOTIFICATION_SERVICE_URL: http://54.91.107.214
       API_GATEWAY_URL: http://localhost:3000
       
