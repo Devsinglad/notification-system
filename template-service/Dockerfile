@@ -27,6 +27,6 @@ RUN useradd --create-home --shell /bin/bash appuser \
 
 USER appuser
 
-EXPOSE ${PORT}
+EXPOSE 80
 
 CMD ["/venv/bin/python", "start.py"]
