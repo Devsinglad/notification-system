@@ -1,31 +1,32 @@
 FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
-	PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    PORT=80
 
 WORKDIR /app
 
 RUN apt-get update \
-	&& apt-get install -y --no-install-recommends \
-	   build-essential \
-	   libpq-dev \
-	&& rm -rf /var/lib/apt/lists/*
+    && apt-get install -y --no-install-recommends \
+       build-essential \
+       libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 
 RUN python -m venv /venv \
-	&& /venv/bin/pip install --upgrade pip setuptools wheel \
-	&& /venv/bin/pip install --no-cache-dir -r requirements.txt
+    && /venv/bin/pip install --upgrade pip setuptools wheel \
+    && /venv/bin/pip install --no-cache-dir -r requirements.txt
 
 ENV PATH="/venv/bin:$PATH"
 
 COPY . .
 
 RUN useradd --create-home --shell /bin/bash appuser \
-	&& chown -R appuser:appuser /app
+    && chown -R appuser:appuser /app
 
 USER appuser
 
-EXPOSE 8000
+EXPOSE ${PORT}
 
-CMD ["/app/.venv/bin/python", "start.py"]
+CMD ["/venv/bin/python", "start.py"]
