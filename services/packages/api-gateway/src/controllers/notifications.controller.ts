@@ -32,9 +32,9 @@ import {
 @ApiTags('Notifications')
 @Controller('notifications')
 @UseGuards(JwtAuthGuard)
-@ApiBearerAuth()
+@ApiBearerAuth('JWT-auth')
 export class NotificationsController {
-  constructor(private notificationService: NotificationService) {}
+  constructor(private notificationService: NotificationService) { }
 
   @Post('email')
   @HttpCode(HttpStatus.ACCEPTED)

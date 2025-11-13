@@ -1,8 +1,9 @@
-
 services:
   # API Gateway Service
   api-gateway:
-    image: simonsinglad/notification-gateway:1.0
+    build:
+      context: ./services/packages/api-gateway
+      dockerfile: Dockerfile
     container_name: api-gateway
     ports:
       - "3000:3000"
@@ -45,7 +46,9 @@ services:
 
   # User Service
   user-service:
-    image: simonsinglad/user-service:1.0
+    build:
+      context: ./services/packages/user-service
+      dockerfile: Dockerfile
     container_name: user-service
     ports:
       - "3001:3001"
@@ -59,7 +62,9 @@ services:
 
   # Email Service
   email-service:
-    image: simonsinglad/email-service:1.0
+    build:
+      context: ./services/packages/email-service
+      dockerfile: Dockerfile
     container_name: email-service
     ports:
       - "3002:3002"
@@ -73,16 +78,17 @@ services:
       - notification-network
     restart: unless-stopped
 
+  # Template Service (if it exists in the same structure)
   template-service:
     build:
-      context: ./template-service
+      context: .template-service
+      dockerfile: Dockerfile
     container_name: template-service
     ports:
       - "8000:8000"
     environment:
       TEMPLATE_DATABASE_URL: ${TEMPLATE_DATABASE_URL}
       REDIS_URL: ${REDIS_URL}
-
     networks:
       - notification-network
     restart: unless-stopped

@@ -42,6 +42,16 @@ async function bootstrap() {
     .setTitle('Notification System API Gateway')
     .setDescription(
       'API Gateway for distributed notification system with email and push notifications',
+    ).addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth', // This name here is important for later
     )
     .setVersion('1.0')
     .build();
