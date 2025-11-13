@@ -7,11 +7,14 @@ import { RedisService } from './redis.service';
 export interface UserPreferences {
   email: boolean;
   push: boolean;
+  email_enabled?: boolean;
+  push_enabled?: boolean;
 }
 
 export interface User {
   id: string;
-  name: string;
+  name?: string;
+  full_name?: string;
   email: string;
   push_token?: string;
   preferences: UserPreferences;

@@ -30,7 +30,7 @@ export class AuthService {
       const payload = {
         sub: user.id,
         email: user.email,
-        name: user.name,
+        name: user.full_name || user.name,
       };
 
       const jwtExpiresIn = this.configService.get<string>('jwt.expiresIn') || '24h';
@@ -44,7 +44,7 @@ export class AuthService {
         user: {
           id: user.id,
           email: user.email,
-          name: user.name,
+          name: user.full_name || user.name || '',
         },
       };
     } catch (error) {
@@ -70,12 +70,12 @@ export class AuthService {
         user: {
           id: user.id,
           email: user.email,
-          full_name: user.name,
+          full_name: user.full_name || user.name || '',
           is_active: user.is_active || true,
           created_at: user.created_at || new Date().toISOString(),
           preferences: {
-            email_enabled: user.preferences.email,
-            push_enabled: user.preferences.push,
+            email_enabled: user.preferences.email_enabled || user.preferences.email || true,
+            push_enabled: user.preferences.push_enabled || user.preferences.push || true,
           },
         },
       };
@@ -83,17 +83,23 @@ export class AuthService {
       this.logger.error('Registration failed', error);
 
       // Check if it's a duplicate user error
-      if (error.message && error.message.includes('already exists')) {
+      if (error.response?.data?.message && error.response.data.message.includes('already exists')) {
         throw new ConflictException('User with this email already exists');
       }
 
       // Check if it's a validation error
-      if (error.message && error.message.includes('validation')) {
-        throw new BadRequestException(error.message);
+      if (error.response?.data?.message && error.response.data.message.includes('validation')) {
+        throw new BadRequestException(error.response.data.message);
       }
 
-      // Generic registration error
-      throw new BadRequestException('Registration failed. Please check your input and try again.');
+      // Check if it's a validation error from class-validator
+      if (error.response?.status === 400 && error.response?.data?.message) {
+        throw new BadRequestException(error.response.data.message);
+      }
+
+      // Generic registration error with more details
+      const errorMessage = error.response?.data?.message || error.message || 'Registration failed. Please check your input and try again.';
+      throw new BadRequestException(errorMessage);
     }
   }
 
