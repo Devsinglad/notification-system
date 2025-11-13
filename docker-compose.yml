@@ -81,7 +81,7 @@ services:
   # Template Service (if it exists in the same structure)
   template-service:
     build:
-      context: .template-service
+      context: ./template-service
       dockerfile: Dockerfile
     container_name: template-service
     ports:

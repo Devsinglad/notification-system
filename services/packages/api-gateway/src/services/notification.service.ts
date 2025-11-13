@@ -12,7 +12,7 @@ import {
   BulkPushNotificationDto,
   BulkNotificationResponseDto,
 } from '../dto/notification.dto';
-
+import { randomUUID } from 'crypto';
 @Injectable()
 export class NotificationService {
   private readonly logger = new Logger(NotificationService.name);
@@ -21,16 +21,13 @@ export class NotificationService {
     private rabbitmqService: RabbitMQService,
     private redisService: RedisService,
     private userServiceClient: UserServiceClient,
-  ) {}
+  ) { }
 
   async sendEmailNotification(
     emailDto: EmailNotificationDto,
     userId?: string,
   ): Promise<NotificationResponseDto> {
     try {
-      // Dynamically import uuid
-      const { v4: uuidv4 } = await import('uuid');
-      
       // Check user preferences if userId is provided
       if (userId) {
         const hasPermission = await this.userServiceClient.checkNotificationPermission(
@@ -43,7 +40,7 @@ export class NotificationService {
         }
       }
 
-      const notificationId = uuidv4();
+      const notificationId = randomUUID();
       const timestamp = new Date().toISOString();
 
       // Create queue message for tracking
@@ -141,10 +138,7 @@ export class NotificationService {
         }
       }
 
-      // Dynamically import uuid
-      const { v4: uuidv4 } = await import('uuid');
-      
-      const notificationId = uuidv4();
+      const notificationId = randomUUID();
       const timestamp = new Date().toISOString();
 
       const message: QueueMessage = {

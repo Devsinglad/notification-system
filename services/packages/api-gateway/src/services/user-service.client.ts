@@ -162,8 +162,17 @@ export class UserServiceClient {
     notificationType: 'email' | 'push',
   ): Promise<boolean> {
     try {
-      const preferences = await this.getUserPreferences(userId);
-      return preferences[notificationType] === true;
+      const user = await this.getUserById(userId);
+      const preferences = user.preferences;
+
+      // Check both possible field names for backward compatibility
+      if (notificationType === 'email') {
+        return preferences.email === true || preferences.email_enabled === true;
+      } else if (notificationType === 'push') {
+        return preferences.push === true || preferences.push_enabled === true;
+      }
+
+      return false;
     } catch (error) {
       this.logger.error(
         `Failed to check notification permission for user ${userId}`,

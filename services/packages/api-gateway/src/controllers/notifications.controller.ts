@@ -140,23 +140,6 @@ export class NotificationsController {
     };
   }
 
-  @Post('send')
-  @HttpCode(HttpStatus.ACCEPTED)
-  @ApiOperation({ summary: 'Send a push notification' })
-  @ApiResponse({
-    status: 202,
-    description: 'Push notification queued',
-    type: NotificationResponseDto,
-  })
-  @ApiResponse({ status: 400, description: 'Bad request' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async sendNotification(
-    @Body() pushDto: PushNotificationDto,
-    @CurrentUser('userId') userId: string,
-  ): Promise<NotificationResponseDto> {
-    return this.notificationService.sendPushNotification(pushDto, userId);
-  }
-
   @Get('status')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Get notification status by idempotency key' })
